@@ -12,6 +12,34 @@
   <form class="mt-2" th:action="@{/send}" method="post" enctype="multipart/form-data">
 
     <div class="row form-group">
+      <div class="col-sm-3">Host</div>
+      <div class="col-sm-9">
+        <input type="text" name="host" class="form-control"/>
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-sm-3">Port</div>
+      <div class="col-sm-9">
+        <input type="text" name="port" class="form-control"/>
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-sm-3">Username</div>
+      <div class="col-sm-9">
+        <input type="text" name="username" class="form-control"/>
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-sm-3">Password</div>
+      <div class="col-sm-9">
+        <input type="text" name="password" class="form-control"/>
+      </div>
+    </div>
+
+    <div class="row form-group">
       <div class="col-sm-3">Recipient</div>
       <div class="col-sm-9">
         <input type="text" name="recipient" class="form-control"/>

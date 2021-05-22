@@ -10,6 +10,10 @@ import org.springframework.web.multipart.MultipartFile;
 @NoArgsConstructor
 public class Mail {
 
+    String host;
+    String port;
+    String username;
+    String password;
     String recipient;
     String subject;
     String content;

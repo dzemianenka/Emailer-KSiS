@@ -4,7 +4,7 @@ import com.demosocket.emailer.model.Mail;
 import org.springframework.stereotype.Service;
 
 @Service
-public interface EmailerSerivce {
+public interface EmailerService {
 
     void send(Mail mail);
 }
