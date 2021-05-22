@@ -1,8 +1,0 @@
----
-applications:
-  - name: emailer
-    instances: 1
-    memory: 1G
-    host: bsuir-emailer
-    path: build/libs/emailer-0.0.1-SNAPSHOT.jar
-    buildpack: https://github.com/cloudfoundry/java-buildpack.git#v4.17.1
