@@ -1,7 +1,7 @@
 package com.demosocket.emailer.controller;
 
 import com.demosocket.emailer.model.Mail;
-import com.demosocket.emailer.service.EmailerServiceImpl;
+import com.demosocket.emailer.service.EmailerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/")
 public class MailController {
 
-    final private EmailerServiceImpl emailerServiceImpl;
+    final private EmailerService emailerService;
 
     @Autowired
-    public MailController(EmailerServiceImpl emailerServiceImpl) {
-        this.emailerServiceImpl = emailerServiceImpl;
+    public MailController(EmailerService emailerService) {
+        this.emailerService = emailerService;
     }
 
     @GetMapping("/")
@@ -27,7 +27,7 @@ public class MailController {
 
     @PostMapping("/send")
     public String send(@ModelAttribute Mail mail){
-        emailerServiceImpl.send(mail);
+        emailerService.send(mail);
         return "index";
     }
 }
