@@ -4,8 +4,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class Mail {
 
-    private String host;
-    private String port;
     private String username;
     private String password;
     private String recipient;
@@ -15,22 +13,6 @@ public class Mail {
     private MultipartFile attachment;
 
     public Mail() {
-    }
-
-    public String getHost() {
-        return host;
-    }
-
-    public void setHost(String host) {
-        this.host = host;
-    }
-
-    public String getPort() {
-        return port;
-    }
-
-    public void setPort(String port) {
-        this.port = port;
     }
 
     public String getUsername() {

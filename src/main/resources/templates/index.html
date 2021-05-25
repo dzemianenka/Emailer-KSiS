@@ -1,72 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Emailer</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <title>Emailer</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <style>
+        .password-control {
+            position: absolute;
+            top: 11px;
+            right: 25px;
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background: url(https://snipp.ru/demo/495/view.svg) 0 0 no-repeat;
+        }
+        .password-control.view {
+            background: url(https://snipp.ru/demo/495/no-view.svg) 0 0 no-repeat;
+        }
+    </style>
 </head>
 <body>
 <div class="container">
-  <form class="mt-2" th:action="@{/send}" method="post" enctype="multipart/form-data">
-    <div class="row form-group">
-      <div class="col-sm-3">Host</div>
-      <div class="col-sm-9">
-        <input type="text" name="host" class="form-control"/>
-      </div>
-    </div>
-    <div class="row form-group">
-      <div class="col-sm-3">Port</div>
-      <div class="col-sm-9">
-        <input type="text" name="port" class="form-control"/>
-      </div>
-    </div>
-    <div class="row form-group">
-      <div class="col-sm-3">Username (email)</div>
-      <div class="col-sm-9">
-        <input type="text" name="username" class="form-control"/>
-      </div>
-    </div>
-    <div class="row form-group">
-      <div class="col-sm-3">Password</div>
-      <div class="col-sm-9">
-        <input type="text" name="password" class="form-control"/>
-      </div>
-    </div>
-    <div class="row form-group">
-      <div class="col-sm-3">Recipient (email)</div>
-      <div class="col-sm-9">
-        <input type="text" name="recipient" class="form-control"/>
-      </div>
-    </div>
-    <div class="row form-group">
-      <div class="col-sm-3">CC (email)</div>
-      <div class="col-sm-9">
-        <input type="text" name="cc" class="form-control"/>
-      </div>
-    </div>
-    <div class="row form-group">
-      <div class="col-sm-3">Subject</div>
-      <div class="col-sm-9">
-        <input type="text" name="subject" class="form-control"/>
-      </div>
-    </div>
-    <div class="row form-group">
-      <div class="col-sm-3">Content</div>
-      <div class="col-sm-9">
-        <textarea rows="10" name="content" class="form-control"></textarea>
-      </div>
-    </div>
-    <div class="row form-group">
-      <div class="col-sm-3">Attachment (< 1Mb)</div>
-      <div class="col-sm-9">
-        <input type="file" name="attachment" class="form-control-file">
-      </div>
-    </div>
-    <div class="text-right">
-      <button type="submit" class="btn btn-primary">Send</button>
-    </div>
-  </form>
+    <form class="mt-2" th:action="@{/send}" method="post" enctype="multipart/form-data">
+        <div class="row form-group">
+            <div class="col-sm-3">Username (email)</div>
+            <div class="col-sm-9">
+                <input type="text" name="username" class="form-control"/>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-sm-3">Password</div>
+            <div class="col-sm-9">
+                <input type="password" id="password-input" name="password" class="form-control"/>
+                <a href="#" class="password-control" onclick="return show_hide_password(this);"></a>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-sm-3">Recipient (email)</div>
+            <div class="col-sm-9">
+                <input type="text" name="recipient" class="form-control"/>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-sm-3">CC (email)</div>
+            <div class="col-sm-9">
+                <input type="text" name="cc" class="form-control"/>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-sm-3">Subject</div>
+            <div class="col-sm-9">
+                <input type="text" name="subject" class="form-control"/>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-sm-3">Content</div>
+            <div class="col-sm-9">
+                <textarea rows="10" name="content" class="form-control"></textarea>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-sm-3">Attachment (< 1Mb)</div>
+            <div class="col-sm-9">
+                <input type="file" name="attachment" class="form-control-file">
+            </div>
+        </div>
+        <div class="text-right">
+            <button type="submit" class="btn btn-primary">Send</button>
+        </div>
+    </form>
 </div>
 </body>
+<script>
+    function show_hide_password(target){
+        var input = document.getElementById('password-input');
+        if (input.getAttribute('type') === 'password') {
+            target.classList.add('view');
+            input.setAttribute('type', 'text');
+        } else {
+            target.classList.remove('view');
+            input.setAttribute('type', 'password');
+        }
+        return false;
+    }
+</script>
 </html>
