@@ -1,6 +1,10 @@
 package com.demosocket.emailer.service;
 
+import com.demosocket.emailer.controller.MailController;
+import com.demosocket.emailer.exceptions.WrongEmailException;
 import com.demosocket.emailer.model.Mail;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,29 +19,20 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class EmailerServiceImpl implements EmailerService {
 
+    Logger logger = LoggerFactory.getLogger(MailController.class);
+    private static final String MAIL_REGEX = "^(.+)@(.+)$";
+
     @Override
     public void send(Mail mail) {
-        String username = mail.getUsername();
-        String password = mail.getPassword();
-        String to = mail.getRecipient();
 
-        Properties props = new Properties();
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.host", mail.getHost());
-        props.put("mail.smtp.port", mail.getPort());
-
-        // Get the Session object
-        Session session = Session.getInstance(props,
-                new javax.mail.Authenticator() {
-                    protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(username, password);
-                    }
-                });
+        validateEmails(mail);
+        Session session = getSession(mail);
 
         try {
             // creates message part
@@ -50,9 +45,11 @@ public class EmailerServiceImpl implements EmailerService {
 
             // creates a new e-mail message
             Message msg = new MimeMessage(session);
-            msg.setFrom(new InternetAddress(username));
-            InternetAddress[] toAddresses = { new InternetAddress(to) };
-            msg.setRecipients(Message.RecipientType.TO, toAddresses);
+            msg.setFrom(new InternetAddress(mail.getUsername()));
+            InternetAddress[] toAddress = { new InternetAddress(mail.getRecipient()) };
+            InternetAddress[] ccAddress = { new InternetAddress(mail.getCc()) };
+            msg.setRecipients(Message.RecipientType.TO, toAddress);
+            msg.setRecipients(Message.RecipientType.CC, ccAddress);
             msg.setSubject(mail.getSubject());
             msg.setSentDate(new Date());
             msg.setContent(multipart);
@@ -63,6 +60,37 @@ public class EmailerServiceImpl implements EmailerService {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
+    }
+
+    private void validateEmails(Mail mail) {
+        if (isInvalidEmail(mail.getUsername()) || isInvalidEmail(mail.getCc())) {
+            throw new WrongEmailException("Email is incorrect");
+        }
+    }
+
+    private boolean isInvalidEmail(String emailString) {
+        Pattern pattern = Pattern.compile(MAIL_REGEX);
+        Matcher matcher = pattern.matcher(emailString);
+        return !matcher.matches();
+    }
+
+    private Session getSession(Mail mail) {
+        return Session.getInstance(getPropertiesFromMail(mail),
+                new Authenticator() {
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(mail.getUsername(), mail.getPassword());
+                    }
+                });
+    }
+
+    private Properties getPropertiesFromMail(Mail mail) {
+        Properties props = new Properties();
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", mail.getHost());
+        props.put("mail.smtp.port", mail.getPort());
+
+        return props;
     }
 
     private void addFileToMultipart(MultipartFile attachment, Multipart multipart) throws IOException {

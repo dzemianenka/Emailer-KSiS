@@ -9,6 +9,7 @@ public class Mail {
     private String username;
     private String password;
     private String recipient;
+    private String cc;
     private String subject;
     private String content;
     private MultipartFile attachment;
@@ -54,6 +55,14 @@ public class Mail {
 
     public void setRecipient(String recipient) {
         this.recipient = recipient;
+    }
+
+    public String getCc() {
+        return cc;
+    }
+
+    public void setCc(String cc) {
+        this.cc = cc;
     }
 
     public String getSubject() {
