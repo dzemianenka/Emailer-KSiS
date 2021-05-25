@@ -50,10 +50,11 @@ public class EmailerServiceImpl implements EmailerService {
             mimeMessageHelper.setReplyTo(mail.getUsername());
 
             mimeMessageHelper.setTo(mail.getRecipient());
-            mimeMessageHelper.setCc(mail.getCc());
+            if (!mail.getCc().isEmpty()) {
+                mimeMessageHelper.setCc(mail.getCc());
+            }
             mimeMessageHelper.setSubject(mail.getSubject());
             mimeMessageHelper.setText(mail.getContent());
-
             if (!mail.getAttachment().isEmpty()) {
                 mimeMessageHelper.addAttachment(
                         Objects.requireNonNull(mail.getAttachment().getOriginalFilename()), mail.getAttachment()
