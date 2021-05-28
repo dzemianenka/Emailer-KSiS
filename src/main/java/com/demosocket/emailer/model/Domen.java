@@ -5,8 +5,8 @@ public enum Domen {
     MAIL("mail.ru","smtp.mail.ru", 465),
     YANDEX("yandex.ru","smtp.yandex.ru", 465),
     RAMBLER("rambler.ru","smtp.rambler.ru", 465),
-    QIP("qip.ru","smtp.qip.ru", 25),
-    SIBNET("sibnet.ru","smtp.sibnet.ru", 25);
+    YAHOO("yahoo.com","smtp.mail.yahoo.com", 465),
+    UKR("ukr.net","smtp.ukr.net", 465);
 
     String code;
     String host;
