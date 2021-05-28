@@ -23,6 +23,8 @@ public class EmailerServiceImpl implements EmailerService {
 
     @Override
     public void send(Mail mail) {
+
+        validateEmails(mail);
         Domen domen = getDomenFromEmail(mail.getUsername());
 
         Properties javaMailProperties = new Properties();
@@ -40,8 +42,6 @@ public class EmailerServiceImpl implements EmailerService {
         javaMailSender.setPassword(mail.getPassword());
         javaMailSender.setJavaMailProperties(javaMailProperties);
 
-        validateEmails(mail);
-
         try {
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
@@ -49,7 +49,7 @@ public class EmailerServiceImpl implements EmailerService {
             mimeMessageHelper.setFrom(mail.getUsername());
             mimeMessageHelper.setReplyTo(mail.getUsername());
 
-            mimeMessageHelper.setTo(mail.getRecipient());
+            mimeMessageHelper.setTo(mail.getTo());
             if (!mail.getCc().isEmpty()) {
                 mimeMessageHelper.setCc(mail.getCc());
             }
@@ -68,15 +68,6 @@ public class EmailerServiceImpl implements EmailerService {
         }
     }
 
-    private Domen getDomenFromEmail(String username) {
-        String code = username.replaceAll(DOMEN_REGEX, "");
-
-        return Arrays.stream(Domen.values())
-                .filter(d -> code.equals(d.getCode()))
-                .findFirst()
-                .orElseThrow(() -> new WrongEmailException("Wrong domen"));
-    }
-
     private void validateEmails(Mail mail) {
         if (isInvalidEmail(mail.getUsername())) {
             throw new WrongEmailException("Email is incorrect");
@@ -88,5 +79,14 @@ public class EmailerServiceImpl implements EmailerService {
         Matcher matcher = pattern.matcher(emailString);
 
         return !matcher.matches();
+    }
+
+    private Domen getDomenFromEmail(String username) {
+        String code = username.replaceAll(DOMEN_REGEX, "");
+
+        return Arrays.stream(Domen.values())
+                .filter(d -> code.equals(d.getCode()))
+                .findFirst()
+                .orElseThrow(() -> new WrongEmailException("Wrong domen"));
     }
 }

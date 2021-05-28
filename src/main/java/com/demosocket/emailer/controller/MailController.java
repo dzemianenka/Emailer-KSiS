@@ -28,6 +28,6 @@ public class MailController {
     @PostMapping("/send")
     public String send(@ModelAttribute Mail mail) {
         emailerService.send(mail);
-        return "index";
+        return "success";
     }
 }

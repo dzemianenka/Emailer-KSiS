@@ -6,7 +6,7 @@ public class Mail {
 
     private String username;
     private String password;
-    private String recipient;
+    private String to;
     private String cc;
     private String subject;
     private String content;
@@ -31,12 +31,12 @@ public class Mail {
         this.password = password;
     }
 
-    public String getRecipient() {
-        return recipient;
+    public String getTo() {
+        return to;
     }
 
-    public void setRecipient(String recipient) {
-        this.recipient = recipient;
+    public void setTo(String to) {
+        this.to = to;
     }
 
     public String getCc() {
