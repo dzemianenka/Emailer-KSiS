@@ -34,21 +34,7 @@ public class EmailerServiceImpl implements EmailerService {
         javaMailSender.setJavaMailProperties(javaMailProperties);
 
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-
-        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
-        mimeMessageHelper.setFrom(mail.getUsername());
-        mimeMessageHelper.setReplyTo(mail.getUsername());
-        mimeMessageHelper.setTo(mail.getTo());
-        if (!mail.getCc().isEmpty()) {
-            mimeMessageHelper.setCc(mail.getCc());
-        }
-        mimeMessageHelper.setSubject(mail.getSubject());
-        mimeMessageHelper.setText(mail.getContent());
-        if (!mail.getAttachment().isEmpty()) {
-            mimeMessageHelper.addAttachment(
-                    Objects.requireNonNull(mail.getAttachment().getOriginalFilename()), mail.getAttachment()
-            );
-        }
+        fillMimeMessage(mimeMessage, mail);
 
         javaMailSender.send(mimeMessage);
     }
@@ -73,6 +59,23 @@ public class EmailerServiceImpl implements EmailerService {
         javaMailSender.setPassword(mail.getPassword());
 
         return javaMailSender;
+    }
+
+    private void fillMimeMessage(MimeMessage mimeMessage, Mail mail) throws Exception {
+        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
+        mimeMessageHelper.setFrom(mail.getUsername());
+        mimeMessageHelper.setReplyTo(mail.getUsername());
+        mimeMessageHelper.setTo(mail.getTo());
+        if (!mail.getCc().isEmpty()) {
+            mimeMessageHelper.setCc(mail.getCc());
+        }
+        mimeMessageHelper.setSubject(mail.getSubject());
+        mimeMessageHelper.setText(mail.getContent());
+        if (!mail.getAttachment().isEmpty()) {
+            mimeMessageHelper.addAttachment(
+                    Objects.requireNonNull(mail.getAttachment().getOriginalFilename()), mail.getAttachment()
+            );
+        }
     }
 
     private void validateEmails(Mail mail) {
