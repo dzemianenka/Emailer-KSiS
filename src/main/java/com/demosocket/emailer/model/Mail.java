@@ -11,7 +11,6 @@ public class Mail {
     private String subject;
     private String content;
     private MultipartFile attachment;
-
     public Mail() {
     }
 
@@ -70,4 +69,5 @@ public class Mail {
     public void setAttachment(MultipartFile attachment) {
         this.attachment = attachment;
     }
+
 }

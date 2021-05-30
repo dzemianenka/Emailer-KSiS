@@ -26,8 +26,9 @@ public class MailController {
     }
 
     @PostMapping("/send")
-    public String send(@ModelAttribute Mail mail) {
+    public String send(@ModelAttribute Mail mail) throws Exception {
         emailerService.send(mail);
         return "success";
     }
+
 }

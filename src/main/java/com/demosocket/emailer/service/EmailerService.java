@@ -6,5 +6,6 @@ import org.springframework.stereotype.Service;
 @Service
 public interface EmailerService {
 
-    void send(Mail mail);
+    void send(Mail mail) throws Exception;
+
 }

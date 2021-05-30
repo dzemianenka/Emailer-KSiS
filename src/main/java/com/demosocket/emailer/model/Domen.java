@@ -29,4 +29,5 @@ public enum Domen {
     public int getPort() {
         return port;
     }
+
 }

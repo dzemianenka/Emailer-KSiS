@@ -14,6 +14,7 @@ import java.util.Objects;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 @Service
 public class EmailerServiceImpl implements EmailerService {
@@ -22,7 +23,7 @@ public class EmailerServiceImpl implements EmailerService {
     private static final String DOMEN_REGEX = "(\\W|^)[\\w.\\-]{0,25}@";
 
     @Override
-    public void send(Mail mail) {
+    public void send(Mail mail) throws Exception {
 
         validateEmails(mail);
         Domen domen = getDomenFromEmail(mail.getUsername());
@@ -42,35 +43,35 @@ public class EmailerServiceImpl implements EmailerService {
         javaMailSender.setPassword(mail.getPassword());
         javaMailSender.setJavaMailProperties(javaMailProperties);
 
-        try {
-            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 
-            mimeMessageHelper.setFrom(mail.getUsername());
-            mimeMessageHelper.setReplyTo(mail.getUsername());
-
-            mimeMessageHelper.setTo(mail.getTo());
-            if (!mail.getCc().isEmpty()) {
-                mimeMessageHelper.setCc(mail.getCc());
-            }
-            mimeMessageHelper.setSubject(mail.getSubject());
-            mimeMessageHelper.setText(mail.getContent());
-            if (!mail.getAttachment().isEmpty()) {
-                mimeMessageHelper.addAttachment(
-                        Objects.requireNonNull(mail.getAttachment().getOriginalFilename()), mail.getAttachment()
-                );
-            }
-
-            javaMailSender.send(mimeMessage);
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
+        mimeMessageHelper.setFrom(mail.getUsername());
+        mimeMessageHelper.setReplyTo(mail.getUsername());
+        mimeMessageHelper.setTo(mail.getTo());
+        if (!mail.getCc().isEmpty()) {
+            mimeMessageHelper.setCc(mail.getCc());
         }
+        mimeMessageHelper.setSubject(mail.getSubject());
+        mimeMessageHelper.setText(mail.getContent());
+        if (!mail.getAttachment().isEmpty()) {
+            mimeMessageHelper.addAttachment(
+                    Objects.requireNonNull(mail.getAttachment().getOriginalFilename()), mail.getAttachment()
+            );
+        }
+
+        javaMailSender.send(mimeMessage);
     }
 
     private void validateEmails(Mail mail) {
-        if (isInvalidEmail(mail.getUsername()) || isInvalidEmail(mail.getTo()) || isInvalidEmail(mail.getCc())) {
-            throw new WrongEmailException("Email is incorrect");
+        Boolean anyWrongEmail = Stream.of(mail.getUsername(), mail.getTo(), mail.getCc())
+                .filter(s -> !s.isEmpty())
+                .map(this::isInvalidEmail)
+                .filter(l -> l.equals(true))
+                .findFirst().orElse(false);
+
+        if (anyWrongEmail.equals(true)) {
+            throw new WrongEmailException("Wrong email");
         }
     }
 
@@ -89,4 +90,5 @@ public class EmailerServiceImpl implements EmailerService {
                 .findFirst()
                 .orElseThrow(() -> new WrongEmailException("Wrong domen"));
     }
+
 }
