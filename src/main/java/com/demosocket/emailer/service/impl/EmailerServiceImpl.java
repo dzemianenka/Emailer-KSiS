@@ -69,7 +69,7 @@ public class EmailerServiceImpl implements EmailerService {
     }
 
     private void validateEmails(Mail mail) {
-        if (isInvalidEmail(mail.getUsername())) {
+        if (isInvalidEmail(mail.getUsername()) || isInvalidEmail(mail.getTo()) || isInvalidEmail(mail.getCc())) {
             throw new WrongEmailException("Email is incorrect");
         }
     }
