@@ -28,19 +28,9 @@ public class EmailerServiceImpl implements EmailerService {
         validateEmails(mail);
         Domen domen = getDomenFromEmail(mail.getUsername());
 
-        Properties javaMailProperties = new Properties();
-        javaMailProperties.put("mail.smtp.starttls.enable", "true");
-        javaMailProperties.put("mail.smtp.auth", "true");
-        javaMailProperties.put("mail.transport.protocol", "smtp");
-        javaMailProperties.put("mail.debug", "true");
-        javaMailProperties.put("mail.smtps.ssl.trust", "*");
-        javaMailProperties.put("mail.smtp.ssl.enable", "true");
+        Properties javaMailProperties = setProperties();
 
-        JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
-        javaMailSender.setHost(domen.getHost());
-        javaMailSender.setPort(domen.getPort());
-        javaMailSender.setUsername(mail.getUsername());
-        javaMailSender.setPassword(mail.getPassword());
+        JavaMailSenderImpl javaMailSender = createJavaMailSender(domen, mail);
         javaMailSender.setJavaMailProperties(javaMailProperties);
 
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
@@ -63,14 +53,37 @@ public class EmailerServiceImpl implements EmailerService {
         javaMailSender.send(mimeMessage);
     }
 
+    private Properties setProperties() {
+        Properties javaMailProperties = new Properties();
+        javaMailProperties.put("mail.smtp.starttls.enable", "true");
+        javaMailProperties.put("mail.smtp.auth", "true");
+        javaMailProperties.put("mail.transport.protocol", "smtp");
+        javaMailProperties.put("mail.debug", "true");
+        javaMailProperties.put("mail.smtps.ssl.trust", "*");
+        javaMailProperties.put("mail.smtp.ssl.enable", "true");
+
+        return javaMailProperties;
+    }
+
+    private JavaMailSenderImpl createJavaMailSender(Domen domen, Mail mail) {
+        JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
+        javaMailSender.setHost(domen.getHost());
+        javaMailSender.setPort(domen.getPort());
+        javaMailSender.setUsername(mail.getUsername());
+        javaMailSender.setPassword(mail.getPassword());
+
+        return javaMailSender;
+    }
+
     private void validateEmails(Mail mail) {
-        Boolean anyWrongEmail = Stream.of(mail.getUsername(), mail.getTo(), mail.getCc())
+        Boolean isWrongEmail = Stream.of(mail.getUsername(), mail.getTo(), mail.getCc())
                 .filter(s -> !s.isEmpty())
                 .map(this::isInvalidEmail)
                 .filter(l -> l.equals(true))
-                .findFirst().orElse(false);
+                .findFirst()
+                .orElse(false);
 
-        if (anyWrongEmail.equals(true)) {
+        if (isWrongEmail.equals(true)) {
             throw new WrongEmailException("Wrong email");
         }
     }
