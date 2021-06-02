@@ -3,8 +3,9 @@ package com.demosocket.emailer.service;
 import com.demosocket.emailer.model.InboxAuth;
 import com.demosocket.emailer.model.InboxMail;
 import com.demosocket.emailer.model.Mail;
-import java.util.List;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public interface EmailerService {

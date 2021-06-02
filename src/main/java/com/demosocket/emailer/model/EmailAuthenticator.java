@@ -8,7 +8,7 @@ public class EmailAuthenticator extends Authenticator {
     private final String username;
     private final String password;
 
-    public EmailAuthenticator (final InboxAuth inboxAuth) {
+    public EmailAuthenticator(final InboxAuth inboxAuth) {
         this.username = inboxAuth.getUsername();
         this.password = inboxAuth.getPassword();
     }

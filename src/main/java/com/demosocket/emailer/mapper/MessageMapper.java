@@ -2,13 +2,14 @@ package com.demosocket.emailer.mapper;
 
 import com.demosocket.emailer.model.InboxMail;
 import com.sun.mail.imap.IMAPMessage;
+import org.springframework.stereotype.Component;
+
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
-import org.springframework.stereotype.Component;
 
 @Component
 public class MessageMapper {
@@ -29,9 +30,9 @@ public class MessageMapper {
 
     private String getFrom(IMAPMessage message) throws MessagingException {
         return Arrays.stream(message.getFrom())
-            .map(a -> (InternetAddress) a)
-            .map(InternetAddress::getAddress)
-            .collect(Collectors.joining(", "));
+                .map(a -> (InternetAddress) a)
+                .map(InternetAddress::getAddress)
+                .collect(Collectors.joining(", "));
     }
 
     private LocalDateTime getDate(IMAPMessage message) throws MessagingException {

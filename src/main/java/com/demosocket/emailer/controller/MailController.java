@@ -1,7 +1,6 @@
 package com.demosocket.emailer.controller;
 
 import com.demosocket.emailer.model.InboxAuth;
-import com.demosocket.emailer.model.InboxMail;
 import com.demosocket.emailer.model.Mail;
 import com.demosocket.emailer.service.EmailerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +41,7 @@ public class MailController {
     @PostMapping("/receive")
     public String receiveMessages(@ModelAttribute InboxAuth inboxAuth, Model model) throws Exception {
         model.addAttribute("mails", emailerService.receive(inboxAuth));
-        return "receiveMessage";
+        return "receivedMessages";
     }
 
 }

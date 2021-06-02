@@ -9,6 +9,10 @@ import com.demosocket.emailer.model.Mail;
 import com.demosocket.emailer.mapper.MessageMapper;
 import com.demosocket.emailer.service.EmailerService;
 import com.sun.mail.imap.IMAPMessage;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.mail.Authenticator;
@@ -16,10 +20,6 @@ import javax.mail.Folder;
 import javax.mail.Message;
 import javax.mail.Session;
 import javax.mail.Store;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.stereotype.Service;
-
 import javax.mail.internet.MimeMessage;
 import java.util.Arrays;
 import java.util.Objects;
@@ -77,9 +77,9 @@ public class EmailerServiceImpl implements EmailerService {
         Message[] message = inboxFolder.getMessages();
 
         return Arrays.stream(message)
-            .map(mesh -> (IMAPMessage) mesh)
-            .map(messageMapper::toInboxMail)
-            .collect(Collectors.toList());
+                .map(mesh -> (IMAPMessage) mesh)
+                .map(messageMapper::toInboxMail)
+                .collect(Collectors.toList());
     }
 
     private Properties setSmtpProperties() {
