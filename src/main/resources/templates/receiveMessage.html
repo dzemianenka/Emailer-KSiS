@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ReceivedMessages</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+</head>
+<body>
+<div>
+    <div class="text-left">
+        <div th:switch="${mails}">
+            <h2 th:case="null">No mails!</h2>
+            <div th:case="*">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>From</th>
+                        <th>Date</th>
+                        <th>Subject</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="mail : ${mails}">
+                        <td th:text="${mail.from}"></td>
+                        <td th:text="${mail.date}"></td>
+                        <td th:text="${mail.subject}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="text-center">
+    <a class="btn btn-primary" href="/" th:href="@{/}">Back to Home Page</a>
+</div>
+</body>
+</html>

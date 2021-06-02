@@ -11,6 +11,7 @@ public class Mail {
     private String subject;
     private String content;
     private MultipartFile attachment;
+
     public Mail() {
     }
 
